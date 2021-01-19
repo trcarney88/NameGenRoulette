@@ -16,7 +16,8 @@ while True:
 	print("----------------------------------")
 
 	domain_name = get_random_word()
-	#domain_name = 'trcarney'
+
+	print (domain_name)
 
 	url = 'https://godaddy.com/domainsearch/find?checkAvail=1&domainToCheck=' + domain_name + ".com"
 
@@ -24,7 +25,7 @@ while True:
 	time.sleep(2)
 	available = ''
 	try:
-		available = browser.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div/div/div/div/div[1]').text
+		available = browser.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/div/div/div/div/div/div/div[1]/span[1]').text
 	except:
 		print('Exception Thrown')
 	
@@ -34,7 +35,7 @@ while True:
 		if available == 'Available' or available ==  'Domain':
 			price = ''
 			try:
-				price = browser.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[1]/div[2]/div/span[1]/div').text
+				price = browser.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/div/div/div/div/div/div/div[2]/div[1]/div[2]/div[1]/div/span').text
 			except:
 				pass
 
