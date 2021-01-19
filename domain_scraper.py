@@ -2,7 +2,6 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from get_domain_name import get_random_word
 import time
-from menu import print_menu
 import random
 import csv
 

@@ -5,6 +5,7 @@ import requests
 def get_random_word():
     url = "https://wordsapiv1.p.rapidapi.com/words/"
 
+    # TODO: Make querystring configurable from the command line
     querystring = {
         "random": "true",
         "letters": "8",
