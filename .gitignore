@@ -3,3 +3,5 @@ tokens.py
 *.exe
 *.log
 *.debug
+
+*.csv

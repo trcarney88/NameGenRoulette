@@ -1,25 +1,25 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from ebird_api import get_bird_names 
+from get_domain_name import get_random_word
 import time
 from menu import print_menu
 import random
+import csv
 
 chrome_options = Options()  
 chrome_options.add_argument("--headless") 
-browser = webdriver.Chrome(chrome_options=chrome_options)
+browser = webdriver.Chrome(options=chrome_options)
 url = 'https://uk.godaddy.com/domainsearch/find?checkAvail=1&domainToCheck=domainnamehellothere.com'
-name_list = get_bird_names()
 
 while True:
 	print("----------------------------------")
 	print("SEARCHING...")
 	print("----------------------------------")
 
-	n = random.randint(0,len(name_list) -1)
-	domain_name = name_list[n]
+	domain_name = get_random_word()
+	#domain_name = 'trcarney'
 
-	url = 'https://uk.godaddy.com/domainsearch/find?checkAvail=1&domainToCheck=' + domain_name + ".com"
+	url = 'https://godaddy.com/domainsearch/find?checkAvail=1&domainToCheck=' + domain_name + ".com"
 
 	browser.get(url)
 	time.sleep(2)
@@ -27,31 +27,32 @@ while True:
 	try:
 		available = browser.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div/div/div/div/div[1]').text
 	except:
-		pass
-	available = available.split(' ')[1].split('\n')[0]
-	print(available)
-	if available == 'Available' or available ==  'Domain':
-		print(domain_name + ".com" + " is available!")
-		print_menu()
-		user_input = input(": ").rstrip()
-		while True:
-			try: 
-				user_input = int(user_input)
-				break
+		print('Exception Thrown')
+	
+	try:
+		available = available.split(' ')[1].split('\n')[0]
+		print(available)
+		if available == 'Available' or available ==  'Domain':
+			price = ''
+			try:
+				price = browser.find_element_by_xpath('/html/body/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[1]/div[2]/div/span[1]/div').text
 			except:
-				user_input = input(": ").rstrip()
-				continue
-		if user_input == 1:
-			# implement stuff
-			new_browser = webdriver.Chrome()
-			new_browser.get(url)
-			continue
-		if user_input == 2:
-			# implement stuff
+				pass
+
+			print(domain_name + ".com" + " is available!")
+			if price != '' and  '$' in price:
+				print('Price:', price)
+
+			with open('domains.csv', 'a') as f:
+				row = [domain_name + '.com', price]
+				writer = csv.writer(f)
+				writer.writerow(row)
+		else:
+			print(domain_name + ".com" + " is taken!")
 			pass
-		if user_input == 3:
-			# implement stuff
-			break
-	else:
-		print(domain_name + ".com" + " is taken!")
-		continue
+	except:
+		print(available)
+
+	# Sleep for 35 sec so we don't go over out data limit
+	print("Waiting so I don't have to pay!")
+	time.sleep(35) 
